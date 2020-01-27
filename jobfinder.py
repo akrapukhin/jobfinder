@@ -4,6 +4,23 @@ print("test")
 x=[]
 url = 'https://api.hh.ru/vacancies'
 
+file_cities = codecs.open('cities.txt', 'r', 'utf-8')
+cities = file_cities.readlines()
+cities_list = []
+for city in cities:
+	if len(city) > 1:
+		cities_list.append(city)
+
+areas = []
+
+if (len(cities_list) == 0):
+	all_countries = requests.get('https://api.hh.ru/areas/countries')
+	all_countries = all_countries.json()
+	for country in all_countries:
+		if country['name'].lower() == 'россия':
+			areas.append(country['id'])
+
+print(areas)
 #testtxt = requests.get('https://raw.githubusercontent.com/akrapukhin/jobfinder/master/companies.txt')
 #test_test = testtxt.content
 #for s in test_test:
@@ -15,7 +32,7 @@ for line in urllib.request.urlopen('https://raw.githubusercontent.com/akrapukhin
 	data.append(line.decode('utf-8'))
     #print(line.decode('utf-8')) #utf-8 or iso8859-1 or whatever the page encoding scheme is
 
-print(data)
+#print(data)
 file_companies = open("companies.txt", "r")
 companies = file_companies.readlines()
 #companies = data
@@ -25,7 +42,7 @@ companies_nums = []
 for s in companies_list:
     companies_nums.append(s[23:-1])
 
-print(companies_nums)
+#print(companies_nums)
 #par = {'text': 'fpga OR плис OR asic OR vhdl OR verilog OR matlab OR embedded OR встраиваемые OR микроконтроллер OR цос OR dsp OR vision OR "компьютерное зрение" OR "computer vision" OR c/c++ OR junior OR СБИС OR vlsi OR quartus OR modelsim OR "deep learning" OR "tensorflow" OR "pytorch" OR synopsys',
 #       'area': [1, 2],
 #       'per_page': '100',
@@ -33,8 +50,8 @@ print(companies_nums)
 #       'order_by' : 'publication_time',
 #      'page': 0}
        
-par = {'text': 'vhopsdflghj',
-       'area': [1, 2],
+par = {'text': 'matlab',
+       'area': 113,
        'per_page': '100',
        'employer_id' : companies_nums,
        'order_by' : 'publication_time',
