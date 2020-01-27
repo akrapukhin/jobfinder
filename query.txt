@@ -1,0 +1,24 @@
+fpga OR 
+плис OR 
+asic OR 
+vhdl OR 
+verilog OR 
+matlab OR 
+embedded OR 
+встраиваемые OR 
+микроконтроллер OR 
+цос OR 
+dsp OR 
+vision OR 
+"компьютерное зрение" OR 
+"computer vision" OR 
+c/c++ OR 
+junior OR 
+СБИС OR 
+vlsi OR 
+quartus OR 
+modelsim OR 
+"deep learning" OR 
+"tensorflow" OR 
+"pytorch" OR 
+synopsys

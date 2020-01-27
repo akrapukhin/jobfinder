@@ -3,6 +3,21 @@ import codecs
 x=[]
 url = 'https://api.hh.ru/vacancies'
 
+file_query = codecs.open('query.txt', 'r', 'utf-8')
+query = file_query.readlines()
+print(query)
+print(len(query))
+query_words = []
+query_words_strip = []
+query_string = ""
+for w in query:
+	query_words.append(w)
+	query_words_strip.append(w.strip())
+	query_string += w.strip() + " "
+print(query_words)
+print(query_words_strip)
+print(query_string.strip())
+
 file_areas = codecs.open('include_areas.txt', 'r', 'utf-8')
 areas = file_areas.readlines()
 areas_list = []
@@ -77,19 +92,19 @@ for s in companies_list:
     companies_nums.append(s[23:-1])
 
 #print(companies_nums)
-#par = {'text': 'fpga OR плис OR asic OR vhdl OR verilog OR matlab OR embedded OR встраиваемые OR микроконтроллер OR цос OR dsp OR vision OR "компьютерное зрение" OR "computer vision" OR c/c++ OR junior OR СБИС OR vlsi OR quartus OR modelsim OR "deep learning" OR "tensorflow" OR "pytorch" OR synopsys',
-#       'area': [1, 2],
-#       'per_page': '100',
-#       'employer_id' : companies_nums,
-#       'order_by' : 'publication_time',
-#      'page': 0}
-       
-par = {'text': 'с++',
-       'area': areas_ids,
+par = {'text': query_string,
+	   'area': [1, 2],
        'per_page': '100',
        'employer_id' : companies_nums,
        'order_by' : 'publication_time',
        'page': 0}
+       
+#par = {'text': 'с++',
+#      'area': areas_ids,
+#       'per_page': '100',
+#       'employer_id' : companies_nums,
+#       'order_by' : 'publication_time',
+#       'page': 0}
 r = requests.get(url, params=par)
 e=r.json()
 x.append(e)
@@ -116,7 +131,7 @@ for j in x:
 			if excluded_area.lower() == i['area']['name'].lower():
 				excluded = True;
 		if (not excluded):	
-			print (i['area']['name'].lower() + " not in " + str(excluded_areas_noendls))
+			#print (i['area']['name'].lower() + " not in " + str(excluded_areas_noendls))
 			salary = i['salary']
 			salary_str = ""
 			if salary == None:
@@ -127,7 +142,7 @@ for j in x:
 				if salary['to'] != None:
 					salary_str += "до " + str(salary['to'])
 				if salary['gross']:
-					salary_str += " до вычета НДФЛ"
+					salary_str += " до вычета"
 				else:
 					salary_str += " на руки"
 			logo_str = ""
@@ -140,7 +155,7 @@ for j in x:
 			html_line += "<td><a href = \"" + i['alternate_url'] + "\" target=\"_blank\">" + i['alternate_url'] + "</a></td>"
 			#html_line += i['published_at'][:10] + " " + i['alternate_url']
 			html_line += "</tr>"
-			print(i['name'] + " " + i['employer']['name'] + " " + i['published_at'][:10] + " " + i['alternate_url'])
+			#print(i['name'] + " " + i['employer']['name'] + " " + i['published_at'][:10] + " " + i['alternate_url'])
 			html += html_line
 			counter += 1
 		else:
