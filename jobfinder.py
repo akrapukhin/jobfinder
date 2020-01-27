@@ -1,26 +1,60 @@
 import requests
 import codecs
-print("test")
 x=[]
 url = 'https://api.hh.ru/vacancies'
 
-file_cities = codecs.open('cities.txt', 'r', 'utf-8')
-cities = file_cities.readlines()
-cities_list = []
-for city in cities:
-	if len(city) > 1:
-		cities_list.append(city)
-
-areas = []
-
-if (len(cities_list) == 0):
-	all_countries = requests.get('https://api.hh.ru/areas/countries')
-	all_countries = all_countries.json()
-	for country in all_countries:
-		if country['name'].lower() == 'россия':
-			areas.append(country['id'])
-
-print(areas)
+file_areas = codecs.open('include_areas.txt', 'r', 'utf-8')
+areas = file_areas.readlines()
+areas_list = []
+for area in areas:
+	if len(area) > 1:
+		areas_list.append(area)
+print(areas_list)
+areas_ids = []
+russia_areas = []
+all_areas = requests.get('https://api.hh.ru/areas')
+all_areas = all_areas.json()
+for area in all_areas:
+	if area['name'].lower() == 'россия':
+		russia_id = area['id']
+		russia_areas = area['areas']
+			
+			
+file_excl_areas = codecs.open('exclude_areas.txt', 'r', 'utf-8')
+excluded_areas = file_excl_areas.readlines()
+print(excluded_areas)
+excluded_areas_noendls = []
+for area in excluded_areas:
+	if area[-1] == '\n':
+		area = area[:-1]
+	excluded_areas_noendls.append(area.lower())
+print("excluded_areas_noendls:")
+print(excluded_areas_noendls)		
+		
+#print(russia_areas)
+if (len(areas_list) == 0):
+	areas_ids.append(russia_id)
+else:
+	for area in areas_list:
+		if area[-1] == '\n':
+			area = area[:-1]
+		area_found = False
+		print('area: ' + area)
+		for region in russia_areas:
+			print(region['name'].lower())
+			print(area.lower())
+			print(region['name'].lower() == area.lower())
+			if region['name'].lower() == area.lower():
+				areas_ids.append(region['id'])
+				area_found = True
+			for city in region['areas']:
+				if city['name'].lower() == area.lower():
+					areas_ids.append(region['id'])
+					area_found = True
+		if not area_found:
+			print('территория не найдена: ' + area)
+			
+print('areas_ids: ' + str(areas_ids))
 #testtxt = requests.get('https://raw.githubusercontent.com/akrapukhin/jobfinder/master/companies.txt')
 #test_test = testtxt.content
 #for s in test_test:
@@ -50,8 +84,8 @@ for s in companies_list:
 #       'order_by' : 'publication_time',
 #      'page': 0}
        
-par = {'text': 'matlab',
-       'area': 113,
+par = {'text': 'с++',
+       'area': areas_ids,
        'per_page': '100',
        'employer_id' : companies_nums,
        'order_by' : 'publication_time',
@@ -60,7 +94,7 @@ r = requests.get(url, params=par)
 e=r.json()
 x.append(e)
 #print(e)
-print(e['found'])
+num_of_vacancies = e['found']
 num_of_pages = e['pages']
 print("num_of_pages: " + str(num_of_pages))
 
@@ -71,44 +105,55 @@ for pagenum in range(num_of_pages-1):
     x.append(e)
 
 #print(e['alternate_url'])
-html = """<!DOCTYPE html><html><head><style>table, th, td {border: 1px solid black;}</style><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body><h1>"""
-html+= str(e['found']) + " вакансий найдено:" + "</h1>"
-
-html+= "<table style=\"width:100%\"><tr><th>#</th><th>Должность</th><th>Компания</th><th>Лого</th><th>Город</th><th>Зарплата</th><th>Дата</th><th>Ссылка</th></tr>"
+html = ""
 
 counter = 1
 for j in x:
-    y = j['items']
-    for i in y:
-        salary = i['salary']
-        salary_str = ""
-        if salary == None:
-            salary_str = "не указана"
-        else:
-            if salary['from'] != None:
-                salary_str = "от " + str(salary['from']) + " "
-            if salary['to'] != None:
-                salary_str += "до " + str(salary['to'])
-            if salary['gross']:
-                salary_str += " до вычета НДФЛ"
-            else:
-                salary_str += " на руки"
-        #'salary': {'from': 40000, 'to': 80000, 'currency': 'RUR', 'gross': False}
-        logo_str = ""
-        if i['employer']['logo_urls'] != None:
-            if i['employer']['logo_urls']['90'] != None:
-                logo_str = i['employer']['logo_urls']['90']
+	y = j['items']
+	for i in y:
+		excluded = False
+		for excluded_area in excluded_areas_noendls:
+			if excluded_area.lower() == i['area']['name'].lower():
+				excluded = True;
+		if (not excluded):	
+			print (i['area']['name'].lower() + " not in " + str(excluded_areas_noendls))
+			salary = i['salary']
+			salary_str = ""
+			if salary == None:
+				salary_str = "не указана"
+			else:
+				if salary['from'] != None:
+					salary_str = "от " + str(salary['from']) + " "
+				if salary['to'] != None:
+					salary_str += "до " + str(salary['to'])
+				if salary['gross']:
+					salary_str += " до вычета НДФЛ"
+				else:
+					salary_str += " на руки"
+			logo_str = ""
+			if i['employer']['logo_urls'] != None:
+				if i['employer']['logo_urls']['90'] != None:
+					logo_str = i['employer']['logo_urls']['90']
 
-        html_line = "<tr><td>"
-        html_line += str(counter) + "</td><td>" + i['name'] + "</td><td>" + i['employer']['name'] + "</td> <td align=\"center\">" + "<img src=\"" + logo_str + "\"" + "></td> <td>" + i['area']['name'] + "</td> <td>" + salary_str +"</td> <td style=\"white-space:nowrap;\">"+ i['published_at'][8:10] + i['published_at'][7] + i['published_at'][5:7] + i['published_at'][4] + i['published_at'][0:4] +  "</td> "
-        html_line += "<td><a href = \"" + i['alternate_url'] + "\" target=\"_blank\">" + i['alternate_url'] + "</a></td>"
-        #html_line += i['published_at'][:10] + " " + i['alternate_url']
-        html_line += "</tr>"
-        print(i['name'] + " " + i['employer']['name'] + " " + i['published_at'][:10] + " " + i['alternate_url'])
-        html += html_line
-        counter += 1
+			html_line = "<tr><td>"
+			html_line += str(counter) + "</td><td>" + i['name'] + "</td><td>" + i['employer']['name'] + "</td> <td align=\"center\">" + "<img src=\"" + logo_str + "\"" + "></td> <td>" + i['area']['name'] + "</td> <td>" + salary_str +"</td> <td style=\"white-space:nowrap;\">"+ i['published_at'][8:10] + i['published_at'][7] + i['published_at'][5:7] + i['published_at'][4] + i['published_at'][0:4] +  "</td> "
+			html_line += "<td><a href = \"" + i['alternate_url'] + "\" target=\"_blank\">" + i['alternate_url'] + "</a></td>"
+			#html_line += i['published_at'][:10] + " " + i['alternate_url']
+			html_line += "</tr>"
+			print(i['name'] + " " + i['employer']['name'] + " " + i['published_at'][:10] + " " + i['alternate_url'])
+			html += html_line
+			counter += 1
+		else:
+			num_of_vacancies -= 1
 
+print('num of vacancies: ' + str(num_of_vacancies))
 html += "</body></html>"
+
+html_start = """<!DOCTYPE html><html><head><style>table, th, td {border: 1px solid black;}</style><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body><h1>"""
+html_start+= str(num_of_vacancies) + " вакансий найдено:" + "</h1>"
+
+html_start+= "<table style=\"width:100%\"><tr><th>#</th><th>Должность</th><th>Компания</th><th>Лого</th><th>Город</th><th>Зарплата</th><th>Дата</th><th>Ссылка</th></tr>"
+html = html_start + html
 #параметры, которые будут добавлены к запросу
 # file_area = open("area.txt","r")
 # area = file_area.readline()
@@ -131,3 +176,8 @@ file_results.close()
 import webbrowser
 url = 'results_test_table.html'
 webbrowser.open(url, new=2)  # open in new tab
+
+test_list = ['москва', 'сочи', 'санкт-петербург']
+print(test_list)
+test_boo = 'санкт-петербург' not in test_list
+print(test_boo)
