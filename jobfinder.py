@@ -1,6 +1,14 @@
 import requests
 import codecs
+import urllib.request
+import webbrowser
 version = "29012020a"
+new_version = False
+for line in urllib.request.urlopen('https://raw.githubusercontent.com/akrapukhin/jobfinder/master/jobfinder.py'):
+	line = line.decode('utf-8').rstrip()
+	if line[0:7] == "version":
+		if line[11:-1] != version:
+			new_version = True
 
 # read query from file
 file_query = codecs.open('query.txt', 'r', 'utf-8')
@@ -38,7 +46,7 @@ for area in excluded_areas:
 
 # load list of companies
 companies = []
-import urllib.request  # the lib that handles the url stuff
+
 for line in urllib.request.urlopen('https://raw.githubusercontent.com/akrapukhin/jobfinder/master/companies.txt'):
 	companies.append(line.decode('utf-8').strip())
 companies = set(companies)
@@ -65,18 +73,29 @@ else:
 					area_found = True
 		if not area_found:
 			print('территория не найдена: ' + area)
+			areas_list.remove(area)
 
+print("areas_ids: ")
+print(areas_ids)
+if len(areas_ids) == 0:
+	areas_ids.append(russia_id)
+	areas_list.append("Россия")
+print("areas_ids: ")
+print(areas_ids)
 # parameters of query to hh
+date_from = None
 par = {'text': query_string,
 	   'area': areas_ids,
        'per_page': '100',
        'employer_id' : companies_nums,
        'order_by' : 'publication_time',
+	   'date_from' : date_from,
        'page': 0}
        
 # request to hh to get all vacancies
 all_pages = []
 first_page_vacancies = requests.get('https://api.hh.ru/vacancies', params=par)
+print(first_page_vacancies)
 first_page_vacancies = first_page_vacancies.json()
 all_pages.append(first_page_vacancies)
 
@@ -135,7 +154,7 @@ for page in all_pages:
 			                                                      + vac['published_at'][5:7]\
 			                                                      + vac['published_at'][4]\
 			                                                      + vac['published_at'][0:4] + " "\
-			                                                      + vac['published_at'][11:16] #time of publication
+						 										  + vac['published_at'][11:16] #time of publication
 			html_line += "</td><td><a href = \"" + vac['alternate_url'] + "\" target=\"_blank\">" + vac['alternate_url'] + "</a></td></tr>" #link to vacancy
 			#print(vac['name'] + " " + vac['employer']['name'] + " " + vac['published_at'] + " " + vac['alternate_url'])
 			html += html_line
@@ -146,17 +165,22 @@ for page in all_pages:
 print('num of vacancies: ' + str(num_of_vacancies))
 html += "</body></html>"
 html_start = """<!DOCTYPE html><html><head><style>table, th, td {border: 1px solid black;}</style><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>"""
-html_start+= "<t>" + "<b>" +"вакансий найдено: "+ "</b>"  + str(num_of_vacancies) + "</t><br/>"
-html_start+= "<t>" + "<b>" +"область поиска: "+ "</b>"  + str(areas_list) + "</t><br/>"
-html_start+= "<t>" + "<b>" +"исключения: "+ "</b>"  + str(excluded_areas_noendls) + "</t><br/>"
-html_start+= "<t>" + "<b>" + "запрос: "+ "</b>"  + query_string + "</t><br/>"
-html_start+= "<t>" + "<b>" + "кол-во компаний из списка на hh: " + "</b>" + str(len(companies_nums)) + "</t><br/>"
-html_start+= "<table style=\"width:100%\"><tr><th>#</th><th>Должность</th><th>Компания</th><th>Лого</th><th>Город</th><th>Зарплата</th><th>Дата и время (мск)</th><th>Ссылка</th></tr>"
+if new_version:
+	html_start += "<t>" + "Доступна новая версия скрипта. Эта версия может работать неправильно. \
+	Перейдите по ссылке " + "<a href = \"" + "https://github.com/akrapukhin/jobfinder/blob/master/jobfinder.py" + "\" target=\"_blank\">" + "https://github.com/akrapukhin/jobfinder/blob/master/jobfinder.py" + "</a>" + \
+				  ", наведите курсор на кнопку \"Raw\", нажмите \"сохранить объект как...\" (или что-то подобное в зависимости от браузера)\
+				   и положите скачанный файл в папку со скриптом, согласившись на замену." + "</t><br/><br/>"
+html_start += "<t>" + "<b>" +"Вакансий найдено: "+ "</b>"  + str(num_of_vacancies) + "</t><br/>"
+html_start += "<t>" + "<b>" +"Область поиска: "+ "</b>"  + str(areas_list) + "</t><br/>"
+html_start += "<t>" + "<b>" +"Исключения: "+ "</b>"  + str(excluded_areas_noendls) + "</t><br/>"
+html_start += "<t>" + "<b>" + "Запрос: "+ "</b>" + query_string + "</t><br/>"
+html_start += "<t>" + "<b>" + "Кол-во компаний из списка на hh: " + "</b>" + str(len(companies_nums)) + "</t><br/>"
+html_start += "<table style=\"width:100%\"><tr><th>#</th><th>Должность</th><th>Компания</th><th>Лого</th><th>Город</th><th>Зарплата</th><th>Дата и время (мск)</th><th>Ссылка</th></tr>"
 html = html_start + html
 
 file_results = codecs.open('results_test_table.html', 'w', 'utf-8')
 file_results.write(html)
 file_results.close()
 
-import webbrowser
+
 webbrowser.open('results_test_table.html', new=2)  # open in new tab
