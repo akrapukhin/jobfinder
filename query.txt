@@ -1,1 +1,10 @@
-менеджер
+fpga OR
+vhdl OR
+verilog OR
+matlab OR
+embedded OR
+"встраиваемые системы" OR
+микроконтроллер OR
+"компьютерное зрение" OR
+"computer vision" OR
+"c++"
