@@ -64,6 +64,7 @@ for area in excluded_areas:
     if area != '':
         excluded_areas_list.append(area)
 
+# check excluded cities
 for excl_area in excluded_areas_list:
     area_found = False
     for region in russia_areas:
