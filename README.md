@@ -4,6 +4,7 @@
 
 ## 2. Установка Python
 Для запуска скрипта нужен установленный Python 3. Возможно он уже устанвлен на вашей системе. Это можно проверить, запустив командную строку (Command Prompt). На Windows 10  можно 
+![Image of cmd](https://github.com/akrapukhin/jf_images/blob/master/image.png)
 ```
 python3 --version
 ```
