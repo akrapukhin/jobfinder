@@ -4,7 +4,7 @@ import urllib.request
 import webbrowser
 
 # check if there is a new version available
-version = "2020-02-02b"
+version = "2020-02-02c"
 new_version = False
 for line in urllib.request.urlopen('https://raw.githubusercontent.com/akrapukhin/jobfinder/master/jobfinder.py'):
     line = line.decode('utf-8').strip()
