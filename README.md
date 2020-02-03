@@ -29,10 +29,11 @@
 ![terminal](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_22-18-40.png)
 
 #### 3.2. Установка Requests
-Введите в командной строке
-'''
+Введите в командной строке и нажмите Enter:
+```
 pip3 install requests
-'''
+```
+![terminal](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_22-25-00.png)
 
 
 ## 4. Запуск скрипта
