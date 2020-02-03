@@ -29,7 +29,7 @@
 ![terminal](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_22-18-40.png)
 
 #### 3.2. Установка Requests
-Введите в командной строке и нажмите Enter:
+Введите команду "pip3 install requests" в командной строке и нажмите Enter:
 ```
 pip3 install requests
 ```
@@ -37,7 +37,31 @@ pip3 install requests
 
 
 ## 4. Запуск скрипта
-Запуск скрипта также осуществляется из командной строки. Для этого сначала нужно, чтобы командная строка указывала на папку, в которой находится скрипт. 
+Запуск скрипта также осуществляется из командной строки. Для этого сначала нужно, чтобы командная строка указывала на папку, в которой находится скрипт. Для этого вы можете сначала зайти в папку со скриптом и скопировать адрес:
+![copy](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_22-25-00.png)
+
+И затем вставить (ctrl+v) этот адрес в командную строку, перед этим написав cd:
+```
+cd path/to/script
+```
+![terminal](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_22-48-19.png)
+
+Нажмите Enter. Командная строка в результате указывает на папку со скриптом. Теперь можно запустить скрипт. Введите команду "python3 jobfinder.py":
+```
+python3 jobfinder.py
+```
+![terminal](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_23-25-07.png)
+
+Если все работает правильно, появится информация о количестве найденных вакансий и тд.
+![terminal](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_23-30-22.png)
+
+Результаты будут записаны в HTML-файл results.html, который должен сразу автоматически открыться в вашем браузере:
+![results](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_23-35-25.png)
+
+Если файл не открылся, то зайдите в папку со скриптом, выберите файл results.html и откройте с помощью любого браузера:
+![open_with](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_23-40-07.png)
+
+
 
 
 ## 5. Настройка поисковых параметров
