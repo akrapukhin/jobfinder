@@ -1,5 +1,5 @@
 # jobfinder
-Скрипт для поиска вакансий на hh.ru среди компаний из списка программы Глобальное Образование (http://educationglobal.ru/ns/participant/employment/)
+Скрипт для поиска вакансий на hh.ru среди компаний из списка программы "Глобальное Образование" (http://educationglobal.ru/ns/participant/employment/)
 
 ## 1. Скачивание
 Нажмите на зеленую кнопку "Clone or download" наверху, затем в появившемся окне нажмите "Download ZIP". Разархивируйте ZIP-файл в любую папку.
