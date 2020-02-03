@@ -12,6 +12,7 @@
 
 Введите в поиск "python". Вы должны увидеть результатах python 3.7 и 3.8. Можно установить любой, у меня установлен 3.7. 
 ![python search](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_22-02-14.png)
+
 Заходите на страницу программы и нажимаете "Получить". Все должно установиться автоматически.
 ![Image of store](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_22-06-10.png)
 
