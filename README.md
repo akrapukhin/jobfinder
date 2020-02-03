@@ -74,7 +74,7 @@ python3 jobfinder.py
 https://hh.ru/article/1175
 
 Например, с помощью этого языка вы можете объединить несколько запросов в один, используя слово OR:
-![query](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_23-58-19.png)
+![query](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_23-57-29.png)
 
 Если вы затем будете редактировать этот файл, не допускайте того, чтобы слово OR оказалось последним. Например, если вы решили удалить последнюю строку и забыли убрать OR с предыдущей строки, то headhunter вернет некорректные результаты и никак об этом не предупредит.
 ![queryor](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_23-58-19.png)
