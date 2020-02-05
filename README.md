@@ -48,7 +48,7 @@ pip3 install requests
 
 И затем вставить (ctrl+v) этот адрес в командную строку, перед этим написав cd:
 ```
-cd path/to/script
+cd your/path/to/scriptfolder
 ```
 ![terminal](https://github.com/akrapukhin/jf_images/blob/master/2020-02-03_22-48-19.png)
 
