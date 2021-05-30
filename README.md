@@ -1,6 +1,7 @@
 # jobfinder
 
-<b>Внимание! Это устаревший скрипт. На его основе был сделан сайт, рекомендуется пользоваться им:</b> https://gescript.herokuapp.com/
+<b>Внимание! Это устаревший скрипт. На его основе был сделан сайт, рекомендуется пользоваться им:</b> https://gescript.herokuapp.com/<br>
+Код: https://github.com/akrapukhin/django_gescript
 
 Скрипт для поиска вакансий на hh.ru среди компаний из списка работодателей программы "Глобальное Образование" (http://educationglobal.ru/ns/participant/employment/)
 
